@@ -1,12 +1,62 @@
-# React + Vite
+RoshFlix
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A cyberpunk-themed movie search app powered by React, TailwindCSS, and OMDb API.  
+Search, browse, and save movies in a neon-glow interface.
 
-Currently, two official plugins are available:
+Features:
+- Live debounced search  
+- Add/remove favorites  
+- Infinite scroll  
+- Skeleton loaders  
+- Error handling  
+- Cyberpunk UI  
+- Mobile responsive
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Tech Stack:
+- React + Vite  
+- TailwindCSS  
+- Axios  
+- OMDb API  
+- Custom React Hooks  
+- Context API
 
-## Expanding the ESLint configuration
+Structure (Simplified):
+src/
+- assets/
+- components/
+  - common/
+  - movies/
+- context/
+- hooks/
+- pages/
+- App.jsx
+- index.css
+- main.jsx
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Setup:
+Clone repo:
+git clone https://github.com/Roshanbtech/RoshFlix.git  
+cd RoshFlix  
+npm install
+
+Create .env file:
+VITE_OMDB_API_KEY=your_api_key
+
+Run app:
+npm run dev
+
+Deployment:
+Works well on Vercel or Netlify.  
+Remember to set API keys as environment variables on host platform.
+
+Credits:
+OMDb API  
+React  
+Tailwind CSS  
+Framer Motion  
+React Icons
+
+License:
+MIT
+
+Made with love by Roshan Reji
