@@ -13,7 +13,13 @@ const useFetch = (url, deps = []) => {
     setData(null);
 
     axios.get(url)
-      .then(res => isMounted && setData(res.data))
+      .then(res => {
+        if (res.data.Response === "False") {
+          if (isMounted) setError(res.data.Error || "API Error");
+        } else if (isMounted) {
+          setData(res.data);
+        }
+      })
       .catch(err => isMounted && setError(err.message))
       .finally(() => isMounted && setLoading(false));
 
