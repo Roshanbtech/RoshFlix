@@ -10,7 +10,10 @@ import SearchBar from "../components/common/SearchBar";
 import FilterBar from "../components/common/FilterBar";
 import Error from "../components/common/Error";
 
-const OMDB_API_KEY = import.meta.env.VITE_OMDB_API_KEY;
+const OMDB_API_KEYS = [
+  import.meta.env.VITE_OMDB_API_KEY,
+  import.meta.env.VITE_OMDB_API_KEY_2,
+];
 
 const Home = () => {
   const { search, setSearch, type, setType, year, setYear } = useMovieContext();
@@ -21,11 +24,14 @@ const Home = () => {
   const [movies, setMovies] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
+  const [apiKeyIdx, setApiKeyIdx] = useState(0);
+  const apiKey = OMDB_API_KEYS[apiKeyIdx];
+
   useEffect(() => {
     setSearch(searchInput.value);
   }, [searchInput.value, setSearch]);
 
-  const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${
+  const url = `https://www.omdbapi.com/?apikey=${apiKey}&s=${
     debouncedSearch || "harry potter"
   }${type ? `&type=${type}` : ""}${year ? `&y=${year}` : ""}&page=${page}`;
 
@@ -34,7 +40,18 @@ const Home = () => {
     type,
     year,
     page,
+    apiKeyIdx, 
   ]);
+
+  useEffect(() => {
+    if (
+      error &&
+      error.toLowerCase().includes("limit") &&
+      apiKeyIdx < OMDB_API_KEYS.length - 1
+    ) {
+      setApiKeyIdx((idx) => idx + 1);
+    }
+  }, [error]);
 
   useEffect(() => {
     if (!loading && data?.Search) {
@@ -94,7 +111,6 @@ const Home = () => {
           )}
         </div>
       </div>
-
       {loading && page > 1 && (
         <div className="mt-6 flex justify-center">
           <SkeletonMovieCard />
