@@ -4,7 +4,7 @@ const FilterBar = ({ year, setYear, type, setType }) => (
       <select
         value={type}
         onChange={e => setType(e.target.value)}
-        className="px-3 py-2 rounded border border-gray-300"
+        className="px-3 py-2 rounded border border-gray-300 text-pink-400"
       >
         <option value="">All Types</option>
         <option value="movie">Movie</option>

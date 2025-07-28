@@ -12,21 +12,39 @@ import Error from "../components/common/Error";
 
 const OMDB_API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 
-function Home() {
+const Home = () => {
   const { search, setSearch, type, setType, year, setYear } = useMovieContext();
+  const searchInput = useInput(search);
+  const debouncedSearch = useDebounce(searchInput.value, 600);
+
   const [page, setPage] = useState(1);
   const [movies, setMovies] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
-  const debouncedSearch = useDebounce(search, 600);
-  const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${debouncedSearch || "batman"}${type ? `&type=${type}` : ""}${year ? `&y=${year}` : ""}&page=${page}`;
+  useEffect(() => {
+    setSearch(searchInput.value);
+  }, [searchInput.value, setSearch]);
 
-  const { data, loading, error } = useFetch(url, [debouncedSearch, type, year, page]);
+  const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${
+    debouncedSearch || "harry potter"
+  }${type ? `&type=${type}` : ""}${year ? `&y=${year}` : ""}&page=${page}`;
+
+  const { data, loading, error } = useFetch(url, [
+    debouncedSearch,
+    type,
+    year,
+    page,
+  ]);
 
   useEffect(() => {
     if (!loading && data?.Search) {
-      setMovies((prev) => page === 1 ? data.Search : [...prev, ...data.Search]);
-      setHasMore(data.Search.length > 0 && movies.length + data.Search.length < Number(data.totalResults));
+      setMovies((prev) =>
+        page === 1 ? data.Search : [...prev, ...data.Search]
+      );
+      setHasMore(
+        data.Search.length > 0 &&
+          movies.length + data.Search.length < Number(data.totalResults)
+      );
     } else if (!loading && page === 1) {
       setMovies([]);
       setHasMore(false);
@@ -34,10 +52,9 @@ function Home() {
   }, [data, loading, page]);
 
   useInfiniteScroll(() => {
-    if (!loading && hasMore) setPage(p => p + 1);
+    if (!loading && hasMore) setPage((p) => p + 1);
   }, hasMore);
 
-  // Reset on new search
   useEffect(() => {
     setPage(1);
     setMovies([]);
@@ -45,21 +62,46 @@ function Home() {
   }, [debouncedSearch, type, year]);
 
   return (
-    <div className="p-6">
-      <SearchBar value={search} onChange={e => setSearch(e.target.value)} />
+    <div className="min-h-screen bg-gradient-to-br from-black via-[#3f0fff] via-70% to-[#00fff7] scrollbar py-10">
+      <h1 className="font-[Orbitron] text-5xl md:text-6xl font-extrabold text-center text-neon drop-shadow-glow tracking-widest mb-10">
+        <span>Rosh</span>
+        <span className="text-pink">Flix</span>
+      </h1>
+      <SearchBar
+        value={searchInput.value}
+        onChange={searchInput.onChange}
+        placeholder="Search for movies..."
+      />
       <FilterBar year={year} setYear={setYear} type={type} setType={setType} />
       {error && <Error message={error} />}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {loading && page === 1
-          ? Array(9).fill(0).map((_, i) => <SkeletonMovieCard key={i} />)
-          : movies.map(movie => <MovieCard key={movie.imdbID} movie={movie} />)
-        }
+      <div className="mx-auto max-w-7xl px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10">
+          {loading && page === 1 ? (
+            Array(9)
+              .fill(0)
+              .map((_, i) => <SkeletonMovieCard key={i} />)
+          ) : movies.length === 0 && !loading ? (
+            <div className="col-span-full text-center py-12 text-2xl text-neon">
+              <span role="img" aria-label="sad face">
+                😕
+              </span>
+              <div>No data found!...</div>
+            </div>
+          ) : (
+            movies.map((movie, idx) => (
+              <MovieCard key={movie.imdbID + "-" + idx} movie={movie} />
+            ))
+          )}
+        </div>
       </div>
+
       {loading && page > 1 && (
-        <div className="mt-6 flex justify-center"><SkeletonMovieCard /></div>
+        <div className="mt-6 flex justify-center">
+          <SkeletonMovieCard />
+        </div>
       )}
     </div>
   );
-}
+};
 
 export default Home;

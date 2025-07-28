@@ -1,1 +1,48 @@
 @import "tailwindcss";
+
+html, body {
+  height: 100%;
+  background: #0a0118;
+  color: #fff;
+  font-family: 'Orbitron', 'Audiowide', sans-serif;
+  scrollbar-width: thin;
+  scrollbar-color: #00fff7 #111;
+}
+
+/* Neon utility classes */
+.text-neon { color: #00fff7 !important; }
+.text-cyber-green { color: #39ff14 !important; }
+.text-violet { color: #9d00ff !important; }
+.text-pink { color: #ff3ecb !important; }
+
+.bg-neon {
+  background: linear-gradient(90deg, #3f0fff 0%, #00fff7 60%, #39ff14 100%);
+}
+.bg-cyber-glass {
+  background: linear-gradient(120deg, rgba(10,1,24,0.95) 60%, #3f0fff33 100%);
+  backdrop-filter: blur(16px);
+}
+.shadow-neon {
+  box-shadow: 0 0 10px #00fff7, 0 0 24px #9d00ff, 0 0 38px #39ff14;
+}
+.border-neon {
+  border-color: #00fff7 !important;
+}
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  width: 12px;
+  background: #111;
+}
+html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #00fff7 0%, #3f0fff 50%, #39ff14 100%);
+  border-radius: 12px;
+}
+
+.neon-skeleton .react-loading-skeleton, 
+.react-loading-skeleton.neon-skeleton {
+  background: linear-gradient(90deg, #3f0fff 25%, #00fff7 60%, #39ff14 100%) !important;
+  border-radius: 12px !important;
+  opacity: 0.9;
+}
+
+
